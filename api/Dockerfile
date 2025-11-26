@@ -36,8 +36,10 @@ RUN mkdir -p /app/models || true
 # Expose the port used by the app
 EXPOSE ${PORT}
 
-# Default command to run the Flask app with gunicorn
-# Use 2 workers (adjust based on available resources) and bind to the $PORT
-CMD ["sh", "-c", "gunicorn -w 2 -b 0.0.0.0:$PORT api.app:app"]
+# Default command to run the Flask app with gunicorn using the provided entrypoint
+ENV GUNICORN_WORKERS=2
+ENV GUNICORN_TIMEOUT=30
+COPY api/start.sh /start.sh
+ENTRYPOINT ["/start.sh"]
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD curl -f http://localhost:${PORT}/api/health || exit 1
