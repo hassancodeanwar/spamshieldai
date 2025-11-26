@@ -20,6 +20,7 @@ RUN apt-get update \
         liblapack-dev \
         libgomp1 \
         ca-certificates \
+        curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip and install Python dependencies
@@ -37,4 +38,6 @@ EXPOSE ${PORT}
 
 # Default command to run the Flask app with gunicorn
 # Use 2 workers (adjust based on available resources) and bind to the $PORT
-CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "api.app:app"]
+CMD ["sh", "-c", "gunicorn -w 2 -b 0.0.0.0:$PORT api.app:app"]
+
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD curl -f http://localhost:${PORT}/api/health || exit 1

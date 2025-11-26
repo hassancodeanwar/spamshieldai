@@ -46,5 +46,11 @@ def analyze():
 def health():
     return jsonify({'status': 'ok', 'api': 'SpamShield'})
 
+
+@app.route('/api/health')
+def api_health():
+    # Keep a lightweight, always-available health endpoint for platform checks
+    return jsonify({'status': 'ok', 'api': 'SpamShield'}), 200
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
