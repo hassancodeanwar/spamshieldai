@@ -30,6 +30,12 @@ RUN pip install --upgrade pip && pip install -r requirements-api.txt gunicorn
 # Copy only the API code into /app (so app.py is at /app/app.py)
 COPY api/ /app/
 
+# Copy models (if present in repo root) into the container's /app/models
+COPY models/ /app/models/
+
+# Default models dir (for app.py to use fallback if not set as env)
+ENV MODELS_DIR=/app/models
+
 # Ensure the models folder exists (avoid failing silently) - optional
 RUN mkdir -p /app/models || true
 

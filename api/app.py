@@ -4,17 +4,25 @@ import joblib
 from pathlib import Path
 import os
 
-MODEL_PATH = Path(os.path.join(os.path.dirname(__file__), '..', 'models', 'spam_classifier.pkl')).resolve()
-VECT_PATH = Path(os.path.join(os.path.dirname(__file__), '..', 'models', 'vectorizer.pkl')).resolve()
+BASE_DIR = Path(os.path.dirname(__file__)).resolve()
+# Allow overriding the models directory via env var (defaults to /app/models or ./models relative to app)
+DEFAULT_MODELS_DIR = BASE_DIR / 'models'
+MODELS_DIR = Path(os.environ.get('MODELS_DIR', str(DEFAULT_MODELS_DIR))).resolve()
+# Fallback to a root /models if needed
+FALLBACK_MODELS_DIR = Path('/models')
+
+MODEL_PATH = (MODELS_DIR / 'spam_classifier.pkl') if (MODELS_DIR / 'spam_classifier.pkl').exists() else (FALLBACK_MODELS_DIR / 'spam_classifier.pkl')
+VECT_PATH = (MODELS_DIR / 'vectorizer.pkl') if (MODELS_DIR / 'vectorizer.pkl').exists() else (FALLBACK_MODELS_DIR / 'vectorizer.pkl')
 
 app = Flask(__name__)
 # Enable CORS for all routes (safe for a public read-only prediction API)
 CORS(app)
 
-# Load model/vectorizer once at startup
+print(f"Using model path: {MODEL_PATH}")
+print(f"Using vectorizer path: {VECT_PATH}")
 try:
-    model = joblib.load(MODEL_PATH)
-    vectorizer = joblib.load(VECT_PATH)
+    model = joblib.load(MODEL_PATH) if MODEL_PATH.exists() else None
+    vectorizer = joblib.load(VECT_PATH) if VECT_PATH.exists() else None
 except Exception as e:
     model = None
     vectorizer = None
