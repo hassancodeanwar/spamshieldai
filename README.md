@@ -1,7 +1,7 @@
 # SpamShieldAI
 
 SpamShieldAI is a TypeScript-based project that provides intelligent, configurable spam detection and mitigation for applications that accept user-generated content. By combining modern machine learning heuristics, rule-based filters, and pragmatic integration points, SpamShieldAI aims to be an easy-to-adopt, production-ready layer to reduce spam, abuse, and noise across web forms, comments, messaging systems, and signups.
-
+[![SpamShield Screenshot](https://github.com/user-attachments/assets/c2bc7c84-90a0-4865-b206-97bddba36758)](https://spamshield-frontend-production.up.railway.app/)
 Key goals
 - Accurate: reduce false positives while catching a wide variety of spam techniques.
 - Extensible: support rule-engine, ML models, and third-party score providers.
