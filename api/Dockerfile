@@ -1,0 +1,40 @@
+# Official lightweight Python image
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ARG PORT=5000
+ENV PORT=${PORT}
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies required to build some python packages (scikit-learn, pandas)
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        gcc \
+        gfortran \
+        libopenblas-dev \
+        liblapack-dev \
+        libgomp1 \
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip and install Python dependencies
+COPY api/requirements-api.txt ./requirements-api.txt
+RUN pip install --upgrade pip && pip install -r requirements-api.txt gunicorn
+
+# Copy the entire repository into the container (models live at /app/models)
+COPY . /app
+
+# Ensure the models folder exists (avoid failing silently) - optional
+RUN mkdir -p /app/models || true
+
+# Expose the port used by the app
+EXPOSE ${PORT}
+
+# Default command to run the Flask app with gunicorn
+# Use 2 workers (adjust based on available resources) and bind to the $PORT
+CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "api.app:app"]
