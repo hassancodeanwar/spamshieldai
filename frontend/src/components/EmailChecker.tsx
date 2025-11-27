@@ -52,7 +52,8 @@ const EmailChecker: React.FC = () => {
         body: JSON.stringify({ message: `${subject}\n${emailContent}` })
       });
       if (!res.ok) {
-        throw new Error('API error');
+        const text = await res.text();
+        throw new Error(`API error ${res.status}: ${text}`);
       }
       const data = await res.json();
       setResult({
