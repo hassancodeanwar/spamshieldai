@@ -15,8 +15,15 @@ const EmailChecker: React.FC = () => {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-  // Compute API URL dynamically so forwarded Codespace ports work.
+  // Prefer configured frontend env var VITE_API_URL if provided (best for production)
+  // Vite exposes env vars as import.meta.env.VITE_*
+  const VITE_API_URL = (import.meta.env && import.meta.env.VITE_API_URL) || '';
+  // Compute API URL dynamically as fallback (helpful for Codespaces / local dev)
   const API_URL = (() => {
+    if (VITE_API_URL && VITE_API_URL.length > 0) {
+      // If user provided a full endpoint (with /api/analyze) just use it directly
+      return VITE_API_URL.endsWith('/api/analyze') ? VITE_API_URL : `${VITE_API_URL.replace(/\/$/, '')}/api/analyze`;
+    }
     try {
       const host = window.location.host; // may include port or codespace token like ...-5175.app.github.dev
       // If running on GitHub.dev forwarded port (contains -517), swap the port suffix to 5000
@@ -37,6 +44,8 @@ const EmailChecker: React.FC = () => {
     setIsAnalyzing(true);
     setResult(null);
     try {
+      // Debug: expose which API URL we're contacting (visible in browser console)
+      console.log('Calling backend API:', API_URL);
       const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -54,11 +63,12 @@ const EmailChecker: React.FC = () => {
           `Confidence: ${data.confidence ? data.confidence.toFixed(1) + '%' : 'N/A'}`
         ]
       });
-    } catch (err) {
+    } catch (err: any) {
+      console.error('API request failed:', err);
       setResult({
         isSpam: false,
         score: 0,
-        reasons: ['Error contacting backend API.']
+        reasons: [err?.message || 'Error contacting backend API.']
       });
     }
     setIsAnalyzing(false);
