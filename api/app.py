@@ -15,8 +15,33 @@ MODEL_PATH = (MODELS_DIR / 'spam_classifier.pkl') if (MODELS_DIR / 'spam_classif
 VECT_PATH = (MODELS_DIR / 'vectorizer.pkl') if (MODELS_DIR / 'vectorizer.pkl').exists() else (FALLBACK_MODELS_DIR / 'vectorizer.pkl')
 
 app = Flask(__name__)
-# Enable CORS for all routes (safe for a public read-only prediction API)
-CORS(app)
+# Enable CORS using the CORS_ORIGINS env var if present; default to allow all
+CORS_ORIGINS = os.environ.get('CORS_ORIGINS', '*')
+CORS(app, resources={
+    r"/api/*": {
+        "origins": CORS_ORIGINS,
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"],
+        "supports_credentials": False,
+    }
+}, expose_headers='Content-Type')
+
+# Configure logging to include request details
+import logging
+handler = logging.StreamHandler()
+handler.setLevel(logging.INFO)
+app.logger.addHandler(handler)
+app.logger.setLevel(logging.INFO)
+
+@app.before_request
+def log_request_info():
+    app.logger.info(
+        "Incoming request: method=%s path=%s origin=%s remote_addr=%s",
+        request.method,
+        request.path,
+        request.headers.get('Origin'),
+        request.remote_addr,
+    )
 
 print(f"Using model path: {MODEL_PATH}")
 print(f"Using vectorizer path: {VECT_PATH}")
@@ -59,6 +84,12 @@ def health():
 @app.route('/api/health', methods=['GET'])
 def api_health():
     return jsonify({'status': 'healthy', 'service': 'spamshieldai-api'}), 200
+
+
+@app.route('/api/ping', methods=['GET'])
+def api_ping():
+    """A simple ping endpoint that returns minimal server info for debugging"""
+    return jsonify({'status': 'ok', 'server': 'spamshield-api', 'models_loaded': model is not None}), 200
 
 
 @app.route('/', methods=['GET'])
