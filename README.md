@@ -1,7 +1,7 @@
 # SpamShieldAI
 
 SpamShieldAI is a TypeScript-based project that provides intelligent, configurable spam detection and mitigation for applications that accept user-generated content. By combining modern machine learning heuristics, rule-based filters, and pragmatic integration points, SpamShieldAI aims to be an easy-to-adopt, production-ready layer to reduce spam, abuse, and noise across web forms, comments, messaging systems, and signups.
-[![SpamShield Screenshot](https://github.com/user-attachments/assets/c2bc7c84-90a0-4865-b206-97bddba36758)](https://spamshield-frontend-production.up.railway.app/)
+[![SpamShield Screenshot](https://github.com/user-attachments/assets/c2bc7c84-90a0-4865-b206-97bddba36758)](https://spamshield.up.railway.app/)
 Key goals
 - Accurate: reduce false positives while catching a wide variety of spam techniques.
 - Extensible: support rule-engine, ML models, and third-party score providers.
@@ -18,7 +18,7 @@ Features
 
 Quick overview
 - Language: TypeScript
-- Repository: https://github.com/hassan2nwar/spamshieldai
+- Repository: https://github.com/hassancodenwar/spamshieldai
 - Branch: main
 
 Why SpamShieldAI?
@@ -26,7 +26,7 @@ Modern spam is adaptive: it mixes handcrafted messages, bots mimicking human act
 
 Getting started (developer summary)
 1. Clone the repository:
-   git clone https://github.com/hassan2nwar/spamshieldai.git
+   git clone https://github.com/hassancodeanwar/spamshieldai.git
 2. Install dependencies:
    npm install
 3. Configure environment:
@@ -47,11 +47,11 @@ Configuration
 
 Architecture (high level)
 - Ingest layer: receives content and metadata (IP, headers, timestamps).
-- Feature extraction: normalizes text, computes behavioral signals, extracts entities.
+- Feature extraction: normalizes text, computes behavioral signals, and extracts entities.
 - Rule engine: executes deterministic allow/deny/score rules.
 - Scoring layer: calls models or third-party providers for probabilistic spam score.
 - Decision layer: combines rule outputs and scores to produce a final action.
-- Action handler: executes configured action (log, notify, block, challenge).
+- Action handler: executes the configured action (log, notify, block, challenge).
 
 Integration examples
 - Express middleware: provide a short middleware function to protect any POST endpoint.
@@ -81,8 +81,8 @@ License
 - No license file included by default. Add a LICENSE (MIT/Apache/Proprietary) to clarify usage.
 
 Contact
-- Repository: https://github.com/hassan2nwar/spamshieldai
-- Maintainer: hassan2nwar
+- Repository: https://github.com/hassancodeanwar/spamshieldai
+- Maintainer: hassancodeanwar 
 
 ---
 
