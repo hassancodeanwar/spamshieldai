@@ -106,12 +106,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted }) => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Spam Confidence</span>
-                    <span className="font-semibold">23%</span>
+                    <span className="font-semibold">98%</span>
                   </div>
                   <div className="w-full bg-white/20 rounded-full h-2">
                     <div
                       className="bg-green-400 h-full rounded-full"
-                      style={{ width: '23%' }}
+                      style={{ width: '98%' }}
                     />
                   </div>
                 </div>
