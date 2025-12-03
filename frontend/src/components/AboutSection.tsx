@@ -74,7 +74,7 @@ const AboutSection: React.FC = () => {
           <h2 className="text-xl sm:text-2xl font-bold">About the Creator</h2>
         </div>
         <p className="text-blue-50 text-sm sm:text-base md:text-lg leading-relaxed">
-         Hi, I’m Hassan Anwar—a developer with a strong passion for data, and building tools that make people’s digital lives safer. 
+         Hi, I’m Hassan Anwar a developer with a strong passion for data, and building tools that make people’s digital lives safer. 
           I created SpamShield because I’ve seen how easily someone can fall victim to phishing emails, fake alerts, and cleverly disguised scams. 
           Even tech-savvy people get fooled sometimes.
         </p>
